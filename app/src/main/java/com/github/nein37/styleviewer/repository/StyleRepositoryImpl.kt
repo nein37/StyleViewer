@@ -8,8 +8,8 @@ import java.util.ArrayList
 class StyleRepositoryImpl : StyleRepository {
     override fun getStyleList(prefix: String, suffix: String): List<StyleEntity> {
         return R.style::class.java!!.getFields().filter {
-            (!TextUtils.isEmpty(prefix) && it.name.startsWith(prefix))
-                    || (!TextUtils.isEmpty(suffix) && it.name.endsWith(suffix))
+            (!prefix.isEmpty() && it.name.startsWith(prefix))
+                    || (!suffix.isEmpty() && it.name.endsWith(suffix))
         }.map {
             val fieldName = it.getName();
             val styleId = it.getInt(null);

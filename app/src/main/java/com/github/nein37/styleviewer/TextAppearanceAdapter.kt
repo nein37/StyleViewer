@@ -35,7 +35,7 @@ class TextAppearanceAdapter(internal var textAppearanceList: List<StyleEntity>) 
 
         fun bind(entity: StyleEntity) {
 
-            val styleName = entity.styleName.replace("_", ".")
+            val styleName = entity.styleName;
             var styleId = entity.styleId;
             TextViewCompat.setTextAppearance(binding.styleName, styleId)
             binding.styleName.setText(styleName)
