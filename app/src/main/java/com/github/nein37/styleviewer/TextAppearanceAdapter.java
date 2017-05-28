@@ -1,6 +1,7 @@
 package com.github.nein37.styleviewer;
 
 
+import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.v4.widget.TextViewCompat;
@@ -51,7 +52,11 @@ public class TextAppearanceAdapter extends RecyclerView.Adapter<TextAppearanceAd
         public void bind(Field field) {
 
             String styleName = field.getName().replace("_", ".");
-            int styleId = binding.getRoot().getResources().getIdentifier(styleName, "style", binding.getRoot().getContext().getPackageName());
+            int styleId = 0;
+            try {
+                styleId = field.getInt(null);
+            } catch (IllegalAccessException e) {
+            }
             TextViewCompat.setTextAppearance(binding.styleName, styleId);
             binding.styleName.setText(styleName);
 
