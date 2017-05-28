@@ -11,10 +11,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 
 import com.github.nein37.styleviewer.databinding.ItemTextappearanceBinding
+import com.github.nein37.styleviewer.repository.StyleEntity
 
 import java.lang.reflect.Field
 
-class TextAppearanceAdapter(internal var textAppearanceList: List<Field>) : RecyclerView.Adapter<TextAppearanceAdapter.TextAppearanceViewHolder>() {
+class TextAppearanceAdapter(internal var textAppearanceList: List<StyleEntity>) : RecyclerView.Adapter<TextAppearanceAdapter.TextAppearanceViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextAppearanceAdapter.TextAppearanceViewHolder {
         val bidning = DataBindingUtil.inflate<ItemTextappearanceBinding>(LayoutInflater.from(parent.context), R.layout.item_textappearance, parent, false)
@@ -22,8 +23,8 @@ class TextAppearanceAdapter(internal var textAppearanceList: List<Field>) : Recy
     }
 
     override fun onBindViewHolder(holder: TextAppearanceAdapter.TextAppearanceViewHolder, position: Int) {
-        val field = textAppearanceList[position]
-        holder.bind(field)
+        val entity = textAppearanceList[position]
+        holder.bind(entity)
     }
 
     override fun getItemCount(): Int {
@@ -32,15 +33,10 @@ class TextAppearanceAdapter(internal var textAppearanceList: List<Field>) : Recy
 
     class TextAppearanceViewHolder(var binding: ItemTextappearanceBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(field: Field) {
+        fun bind(entity: StyleEntity) {
 
-            val styleName = field.name.replace("_", ".")
-            var styleId = 0
-            try {
-                styleId = field.getInt(null)
-            } catch (e: IllegalAccessException) {
-            }
-
+            val styleName = entity.styleName.replace("_", ".")
+            var styleId = entity.styleId;
             TextViewCompat.setTextAppearance(binding.styleName, styleId)
             binding.styleName.setText(styleName)
 

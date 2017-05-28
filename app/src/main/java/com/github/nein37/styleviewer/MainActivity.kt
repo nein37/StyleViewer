@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 
 import com.github.nein37.styleviewer.databinding.ActivityMainBinding
+import com.github.nein37.styleviewer.repository.StyleRepository
+import com.github.nein37.styleviewer.repository.StyleRepositoryImpl
 
 import java.lang.reflect.Field
 import java.util.ArrayList
@@ -17,17 +19,8 @@ class MainActivity : AppCompatActivity() {
 
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         setSupportActionBar(binding.toolbar)
-
-        val textAppearanceList = ArrayList<Field>()
-
-        for (field in R.style::class.java!!.getFields()) {
-            val fieldName = field.getName()
-            if (fieldName.startsWith("TextAppearance_")) {
-                textAppearanceList.add(field)
-            }
-        }
-
+        val repo = StyleRepositoryImpl();
         binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.recyclerView.adapter = TextAppearanceAdapter(textAppearanceList)
+        binding.recyclerView.adapter = TextAppearanceAdapter(repo.getStyleList(prefix = "TextAppearance_"))
     }
 }
