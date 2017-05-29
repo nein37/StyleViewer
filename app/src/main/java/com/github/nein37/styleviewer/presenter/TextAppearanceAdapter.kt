@@ -9,11 +9,10 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.github.nein37.styleviewer.R
-
 import com.github.nein37.styleviewer.databinding.ItemTextappearanceBinding
-import com.github.nein37.styleviewer.usecase.StyleEntity
+import com.github.nein37.styleviewer.usecase.TextAppearanceEntity
 
-class TextAppearanceAdapter(internal var textAppearanceList: List<StyleEntity>) : RecyclerView.Adapter<TextAppearanceAdapter.TextAppearanceViewHolder>() {
+class TextAppearanceAdapter(internal var textAppearanceList: List<TextAppearanceEntity>) : RecyclerView.Adapter<TextAppearanceAdapter.TextAppearanceViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextAppearanceViewHolder {
         val bidning = DataBindingUtil.inflate<ItemTextappearanceBinding>(LayoutInflater.from(parent.context), R.layout.item_textappearance, parent, false)
@@ -31,41 +30,32 @@ class TextAppearanceAdapter(internal var textAppearanceList: List<StyleEntity>) 
 
     class TextAppearanceViewHolder(var binding: ItemTextappearanceBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(entity: StyleEntity) {
+        fun bind(entity: TextAppearanceEntity) {
 
-            val styleName = entity.styleName;
-            var styleId = entity.styleId;
-            TextViewCompat.setTextAppearance(binding.styleName, styleId)
-            binding.styleName.setText(styleName)
+            TextViewCompat.setTextAppearance(binding.styleName, entity.styleId)
+            binding.styleName.setText(entity.styleName)
 
-            val textColor = 0xFFFFFFFF.toInt() and binding.styleName.currentTextColor
-            binding.textColor.text = binding.textColor.resources.getString(R.string.text_color_format, textColor)
-            if (textColor == Color.WHITE) {
+
+            binding.textColor.text = binding.textColor.resources.getString(R.string.text_color_format, entity.textcolor)
+            if (entity.textcolor == Color.WHITE) {
                 binding.root.setBackgroundColor(Color.GRAY)
             } else {
                 binding.root.setBackgroundColor(Color.WHITE)
             }
 
-            val textSize = binding.styleName.textSize
-            val textSizeSp = Math.round(textSize / binding.root.resources.displayMetrics.scaledDensity)
+            val textSizeSp = Math.round(entity.textSizePx / binding.root.resources.displayMetrics.scaledDensity)
             binding.textSize.text = binding.textSize.resources.getString(R.string.text_size_format, textSizeSp)
+            binding.isBold.text = entity.isBold.toString()
+            binding.isItalic.text = entity.isItalic.toString()
 
-            var isBold = false
-            var isItalic = false
-            if (binding.styleName.typeface != null) {
-                isBold = binding.styleName.typeface.isBold
-                isItalic = binding.styleName.typeface.isItalic
-            }
-            binding.isBold.text = java.lang.Boolean.toString(isBold)
-            binding.isItalic.text = java.lang.Boolean.toString(isItalic)
-
+            // 何かもっとスマートな方法を探したい…
             var isAllCaps = false
             if (binding.styleName.transformationMethod != null) {
                 if (TextUtils.equals(binding.styleName.transformationMethod.javaClass.getSimpleName(), "AllCapsTransformationMethod")) {
                     isAllCaps = true
                 }
             }
-            binding.isAllCaps.text = java.lang.Boolean.toString(isAllCaps)
+            binding.isAllCaps.text = isAllCaps.toString()
         }
     }
 }
