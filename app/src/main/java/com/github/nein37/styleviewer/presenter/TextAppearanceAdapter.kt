@@ -1,7 +1,6 @@
-package com.github.nein37.styleviewer
+package com.github.nein37.styleviewer.presenter
 
 
-import android.content.res.TypedArray
 import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.support.v4.widget.TextViewCompat
@@ -9,20 +8,19 @@ import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.github.nein37.styleviewer.R
 
 import com.github.nein37.styleviewer.databinding.ItemTextappearanceBinding
-import com.github.nein37.styleviewer.repository.StyleEntity
-
-import java.lang.reflect.Field
+import com.github.nein37.styleviewer.usecase.StyleEntity
 
 class TextAppearanceAdapter(internal var textAppearanceList: List<StyleEntity>) : RecyclerView.Adapter<TextAppearanceAdapter.TextAppearanceViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextAppearanceAdapter.TextAppearanceViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextAppearanceViewHolder {
         val bidning = DataBindingUtil.inflate<ItemTextappearanceBinding>(LayoutInflater.from(parent.context), R.layout.item_textappearance, parent, false)
         return TextAppearanceViewHolder(bidning)
     }
 
-    override fun onBindViewHolder(holder: TextAppearanceAdapter.TextAppearanceViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TextAppearanceViewHolder, position: Int) {
         val entity = textAppearanceList[position]
         holder.bind(entity)
     }

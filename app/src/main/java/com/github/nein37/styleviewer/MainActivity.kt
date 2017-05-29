@@ -3,24 +3,29 @@ package com.github.nein37.styleviewer
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-
+import android.support.v7.widget.RecyclerView
 import com.github.nein37.styleviewer.databinding.ActivityMainBinding
-import com.github.nein37.styleviewer.repository.StyleRepository
-import com.github.nein37.styleviewer.repository.StyleRepositoryImpl
+import com.github.nein37.styleviewer.presenter.TextAppearancePresenter
+import com.github.nein37.styleviewer.usecase.StyleUseCase
+import com.github.nein37.styleviewer.view.MainView
 
-import java.lang.reflect.Field
-import java.util.ArrayList
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainView {
+
+    lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         setSupportActionBar(binding.toolbar)
-        val repo = StyleRepositoryImpl();
-        binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.recyclerView.adapter = TextAppearanceAdapter(repo.getStyleList(prefix = "TextAppearance_"))
+
+        val presenter = TextAppearancePresenter(this, this, StyleUseCase())
+        presenter.onCreate()
+    }
+
+    override fun <T : RecyclerView.ViewHolder> setupRecyclerView(layoutManager: RecyclerView.LayoutManager, adapter: RecyclerView.Adapter<T>) {
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.adapter = adapter
     }
 }
